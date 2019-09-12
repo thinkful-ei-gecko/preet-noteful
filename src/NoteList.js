@@ -7,7 +7,7 @@ export default class NoteList extends Component {
 
   render() {
     //will need to add in our handeDelete below and update event handler line 25
-    const { notes } = this.context;
+    const { notes, handleDeleteNote } = this.context;
 
     return (
       <div>
@@ -22,7 +22,9 @@ export default class NoteList extends Component {
                 className="favorite styled"
                 type="button"
                 value="Delete note" /> 
-                {/* handle delete button */}
+                onClick={() => {
+                  handleDeleteNote(note.id)
+                }}
             </li>  
           )}
         </ul>
