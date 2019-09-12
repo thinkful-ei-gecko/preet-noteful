@@ -15,51 +15,20 @@ class App extends Component {
     notes: [],
   }
 
-  // fetchApi(endpoint, method='GET', key){
-  //   fetch(`http://localhost:9090/${endpoint}`, {
-  //     method: method,
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //   })
-  //   .then(res => res.json())
-  //   .then(res => {
-  //     if(method !== "DELETE") {
-  //       this.setState({[key]: res});
-  //     }
-  //   })
-  // }
-
-  fetchApi(input){
-    const url=('http://localhost:9090/folders');
-    const url2=('http://localhost:9090/notes');
-    //console.log(input);
-    if (input === 'folders'){
-    fetch(url)
-    .then(response =>{
-      if (response.ok){
-        return response.json();
+  fetchApi(endpoint, method='GET', key){
+    fetch(`http://localhost:9090/${endpoint}`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json"
+      },
+    })
+    .then(res => res.json())
+    .then(res => {
+      if(method !== "DELETE") {
+        this.setState({[key]: res});
       }
-      throw new Error (response.statusText);
     })
-    .then (responseJson => this.setState({folders:responseJson}))
-    .catch(err => {
-      console.log("There was an error");
-    })
-   }
-   else
-   fetch(url2)
-    .then(response =>{
-      if (response.ok){
-        return response.json();
-      }
-      throw new Error (response.statusText);
-    })
-    .then (responseJson => this.setState({notes:responseJson}))
-    .catch(err => {
-      console.log("There was an error");
- })
-}
+  }
 
 
   componentDidMount(){
