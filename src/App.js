@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+//import { browserHistory }  from 'react-router-dom';
 import './App.css';
 //import DummyStore from './dummy-store';
 import Header from './Header';
@@ -9,31 +10,69 @@ import Note from './Note';
 import NoteContext from './NoteContext';
 
 class App extends Component {
-  //update to reflect API request
   state = {
     folders: [],
     notes: [],
   }
 
-  fetchApi(){
+  // fetchApi(endpoint, method='GET', key){
+  //   fetch(`http://localhost:9090/${endpoint}`, {
+  //     method: method,
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //   })
+  //   .then(res => res.json())
+  //   .then(res => {
+  //     if(method !== "DELETE") {
+  //       this.setState({[key]: res});
+  //     }
+  //   })
+  // }
 
-  }
+  fetchApi(input){
+    const url=('http://localhost:9090/folders');
+    const url2=('http://localhost:9090/notes');
+    //console.log(input);
+    if (input === 'folders'){
+    fetch(url)
+    .then(response =>{
+      if (response.ok){
+        return response.json();
+      }
+      throw new Error (response.statusText);
+    })
+    .then (responseJson => this.setState({folders:responseJson}))
+    .catch(err => {
+      console.log("There was an error");
+    })
+   }
+   else
+   fetch(url2)
+    .then(response =>{
+      if (response.ok){
+        return response.json();
+      }
+      throw new Error (response.statusText);
+    })
+    .then (responseJson => this.setState({notes:responseJson}))
+    .catch(err => {
+      console.log("There was an error");
+ })
+}
+
 
   componentDidMount(){
-    this.fetchApi('folders', 'folders');
-    this.fetchApi('notes', 'notes');
+        this.fetchApi('folders', 'folders');
+        this.fetchApi('notes', 'notes');
 
   }
-    //#2: implement two fetch requests to two endpoints
-    // /folders and /notes - store in setStaate in app.js
 
-
-  //#3: implement handleDelete button here (for each note in main and folder route)
-  //handleDeleteNote(id){}
-
-  //#4: implement delete on note page, if successful redirect to /path
-
-  //update code below to refelct context <NoteContext.Provider value ...>
+  handleDeleteNote(id){
+    this.fetchApi(`notes.${id.noteId}`, 'notes', 'DELETE');
+    //let filtered 
+  }
+ 
   render() {
     return (
       <NoteContext.Provider value ={{
@@ -43,9 +82,9 @@ class App extends Component {
       }}>
         <>
           <Header />
-          <Route exact path="/" { ...HomePage } />
-          <Route exact path="/folder/:folderId" { ...Folder } />
-          <Route exact path="/notes/:noteId" { ...Note } />
+          <Route exact path="/" Component={ HomePage } />
+          <Route exact path="/folder/:folderId" Component={ Folder } />
+          <Route exact path="/notes/:noteId" Component={ Note } />
         </>
       </NoteContext.Provider>
     )}
